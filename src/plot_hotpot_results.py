@@ -44,24 +44,25 @@ def style_ax(ax):
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13, 5))
 fig.patch.set_facecolor("white")
-fig.suptitle("Recall vs. HotpotQA Scores (1000 queries)",
+fig.suptitle("Document Retrieval Recall vs. HotpotQA Scores (1000 queries)",
              fontsize=13, color="#333333", y=1.01)
 
 # --- Left: full range ---
 for y_vals, label, key in [
-    (em,   "EM",        "em"),
-    (f1,   "F1",        "f1"),
-    (prec, "Precision", "prec"),
-    (rec,  "Recall",    "rec"),
+    (em,   "EM (Exact Match)",  "em"),
+    (f1,   "F1 (Token Overlap)", "f1"),
+    (prec, "Precision",         "prec"),
+    (rec,  "Recall (Answer)",   "rec"),
 ]:
     ax1.scatter(x, y_vals, color=COLORS[key], s=40, zorder=3, label=label)
     add_trendline(ax1, x, y_vals, COLORS[key])
 
 ax1.set_xlim(-0.05, 1.05)
 ax1.set_ylim(0, 100)
-ax1.set_xlabel("Document Retrieval Recall", fontsize=10)
-ax1.set_ylabel("Score (%)", fontsize=10)
-ax1.legend(fontsize=9, frameon=False, ncol=2,
+ax1.set_xlabel("Document Retrieval Recall (fraction of required gold docs retrieved)", fontsize=10)
+ax1.set_ylabel("QA Score (%)", fontsize=10)
+ax1.set_title("Full range (retrieval recall: 0 → 1)", fontsize=10, color="#555555", pad=8)
+ax1.legend(fontsize=9, frameon=False, ncol=1,
            loc="upper left", labelcolor="#444444")
 style_ax(ax1)
 
@@ -74,19 +75,20 @@ prec_z = [v for v, m in zip(prec, zoom_mask) if m]
 rec_z  = [v for v, m in zip(rec,  zoom_mask) if m]
 
 for y_vals, label, key in [
-    (em_z,   "EM",        "em"),
-    (f1_z,   "F1",        "f1"),
-    (prec_z, "Precision", "prec"),
-    (rec_z,  "Recall",    "rec"),
+    (em_z,   "EM (Exact Match)",   "em"),
+    (f1_z,   "F1 (Token Overlap)", "f1"),
+    (prec_z, "Precision",          "prec"),
+    (rec_z,  "Recall (Answer)",    "rec"),
 ]:
     ax2.scatter(x_z, y_vals, color=COLORS[key], s=40, zorder=3, label=label)
     add_trendline(ax2, x_z, y_vals, COLORS[key])
 
 ax2.set_xlim(0.785, 1.015)
 ax2.set_ylim(50, 90)
-ax2.set_xlabel("Document Retrieval Recall", fontsize=10)
-ax2.set_ylabel("Score (%)", fontsize=10)
-ax2.legend(fontsize=9, frameon=False, ncol=2,
+ax2.set_xlabel("Document Retrieval Recall (fraction of required gold docs retrieved)", fontsize=10)
+ax2.set_ylabel("QA Score (%)", fontsize=10)
+ax2.set_title("Zoomed in (retrieval recall: 0.8 → 1.0)", fontsize=10, color="#555555", pad=8)
+ax2.legend(fontsize=9, frameon=False, ncol=1,
            loc="upper left", labelcolor="#444444")
 style_ax(ax2)
 
